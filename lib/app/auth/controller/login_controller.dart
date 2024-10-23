@@ -47,12 +47,12 @@ class LoginController extends GetxController {
         if (response.statusCode == 200 && responseBody['status']==true ) {
           var data = jsonDecode(response.body);
           String accessToken = data['access_token'];
-          int expiresIn = data['expires_in'];  // Time in seconds
-
           // Store the tokens and expiration time
-          await storeTokens(accessToken, expiresIn);
+          await storeTokens(accessToken, 3600);
 
-          VxToast.show(context, msg: "Login Successful");
+          String? tokk= await getAccessToken();
+
+          VxToast.show(context, msg: "Login Successful $tokk ");
           
           // Navigate to Home if login is successful
           Get.offAll(() => const Home());
@@ -60,7 +60,7 @@ class LoginController extends GetxController {
           VxToast.show(context, msg: "Wrong email or password");
         }
       } catch (e) {
-        VxToast.show(context, msg: "An error occurred");
+        VxToast.show(context, msg: "An error occurred $e");
       } finally {
         isLoading(false);
       }
